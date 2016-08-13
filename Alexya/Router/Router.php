@@ -169,6 +169,7 @@ class Router
         }
 
         if(!is_null($this->_defaultRoute)) {
+            $route->isMatched = true;
             $this->_defaultRoute->execute();
         }
 
@@ -224,7 +225,7 @@ class Router
      *             },
      *             ["GET", "POST"]
      *         ]
-     *     ])
+     *     ]);
      *
      * @param mixed|string $regexp   Regular expression to match
      * @param callable     $callback Callback to execute if $expr is matched
@@ -274,6 +275,16 @@ class Router
                 $this->_defaultRoute = $route;
             }
         }
+    }
+
+    /**
+     * Sets the default route.
+     *
+     * @param \Alexya\Router\Route $route Default route.
+     */
+    public function setDefault(Route $route)
+    {
+        $this->_defaultRoute = $route;
     }
 
     /////////////////////

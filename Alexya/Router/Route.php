@@ -60,7 +60,7 @@ class Route
      *
      * @var bool
      */
-    private $_isMatched = false;
+    public $isMatched = false;
 
     /**
      * Constructor.
