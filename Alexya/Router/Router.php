@@ -157,6 +157,8 @@ class Router
      * Test all routes until any of them matches (or there's a default route)
      *
      * @return mixed Route's callback return
+     *
+     * @return \Alexya\Router\Exceptions\NoRouteMatch If no route can handle the request
      */
     public function route()
     {
@@ -170,7 +172,7 @@ class Router
             $this->_defaultRoute->execute();
         }
 
-        throw new NoRouteFound($this->_path);
+        throw new NoRouteMatch($this->_path);
     }
 
     /**
