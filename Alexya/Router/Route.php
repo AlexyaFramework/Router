@@ -93,10 +93,10 @@ class Route
             preg_match($this->_regexp, $path, $this->_matches) &&
             in_array($_SERVER['REQUEST_METHOD'], $this->_methods)
         ) {
-            $this->_isMatched = true;
+            $this->isMatched = true;
         }
 
-        return $this->_isMatched;
+        return $this->isMatched;
     }
 
     /**
@@ -109,7 +109,7 @@ class Route
      */
     public function execute()
     {
-        if(!$this->_isMatched) {
+        if(!$this->isMatched) {
             return;
         }
 
