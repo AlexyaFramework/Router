@@ -17,7 +17,7 @@ namespace Alexya\Router\Exceptions;
  *
  * @author Manulaiko <manulaiko@gmail.com>
  */
-class NoRouteMatch extends Exception
+class NoRouteMatch extends \Exception
 {
     /**
      * Constructor

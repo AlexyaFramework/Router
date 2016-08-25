@@ -162,7 +162,7 @@ class Router
      */
     public function route()
     {
-        foreach($this->routes as $route) {
+        foreach($this->_routes as $route) {
             if($route->matches($this->_path)) {
                 return $route->execute();
             }
@@ -170,7 +170,8 @@ class Router
 
         if(!is_null($this->_defaultRoute)) {
             $route->isMatched = true;
-            $this->_defaultRoute->execute();
+
+            return $this->_defaultRoute->execute();
         }
 
         throw new NoRouteMatch($this->_path);
