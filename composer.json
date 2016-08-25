@@ -1,26 +1,26 @@
 {
-	"name": "alexya-framework/router",
-	"type": "framework",
-    "version": "3.0.4",
-	"description": "Alexya's Router utilities",
-	"keywords": ["php", "framework", "router", "php7", "alexya"],
-	"license": "GNU",
+    "name": "alexya-framework/router",
+    "type": "framework",
+    "version": "3.0.5",
+    "description": "Alexya's Router utilities",
+    "keywords": ["php", "framework", "router", "php7", "alexya"],
+    "license": "GNU",
     "support": {
         "issues": "https://github.com/AlexyaFramework/Router/issues",
         "source": "https://github.com/AlexyaFramework/Router"
     },
-	"authors": [
-		{
+    "authors": [
+        {
             "name": "Manulaiko",
             "email": "manulaiko@gmail.com"
         }
-	],
-	"require": {
-		"php": ">=7.0"
+    ],
+    "require": {
+        "php": ">=7.0"
     },
-	"autoload": {
-		"psr-4": {
+    "autoload": {
+        "psr-4": {
             "Alexya\\": "Alexya"
         }
-	}
+    }
 }
