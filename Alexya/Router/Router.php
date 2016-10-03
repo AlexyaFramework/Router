@@ -156,20 +156,29 @@ class Router
     /**
      * Test all routes until any of them matches (or there's a default route)
      *
+     * @param bool $isChainable `true` to execute more than one route, `false` if not (deufalt = `false`)
+     *
      * @return mixed Route's callback return
      *
      * @return \Alexya\Router\Exceptions\NoRouteMatch If no route can handle the request
      */
-    public function route()
+    public function route(bool $isChainable = false)
     {
         foreach($this->_routes as $route) {
             if($route->matches($this->_path)) {
-                return $route->execute();
+                $ret = $route->execute();
+
+                if(
+                    !$isChainable &&
+                    !$ret
+                ) {
+                    return $ret;
+                }
             }
         }
 
         if(!is_null($this->_defaultRoute)) {
-            $route->isMatched = true;
+            $this->_defaultRoute->isMatched = true;
 
             return $this->_defaultRoute->execute();
         }

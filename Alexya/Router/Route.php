@@ -109,7 +109,10 @@ class Route
      */
     public function execute()
     {
-        if(!$this->isMatched) {
+        if(
+            !$this->isMatched &&
+            $this->_regexp != "#^{DEFAULT}/?#"
+        ) {
             return;
         }
 
