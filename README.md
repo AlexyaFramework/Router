@@ -2,12 +2,13 @@
 Alexya's routing components
 
 ## Contents
-- [Instantiating Router objects](#instantiating_router_objects)
-- [Adding routes](#adding_routes)
+ - [Instantiating Router objects](#instantiating_router_objects)
+ - [Adding routes](#adding_routes)
    - [Adding a single route](#adding_a_single_route)
    - [Adding multiple routes](#adding_multiple_routes)
-- [Matching routes](#matching_routes)
-- [The default route](#the_default_route)
+ - [Matching routes](#matching_routes)
+ - [The default route](#the_default_route)
+ - [Chainable routes](#chainable_routes)
 
 <a name="instantiating_router_objects"></a>
 ## Instantiating Router objects
@@ -137,4 +138,42 @@ $Router->add("{DEFAULT}", function() {
 //  | GET  /blog/post/a          | The page doesn't exist |
 //  | POST /post/                | The page doesn't exist |
 //  | GET  /post/1               | The page doesn't exist |
+```
+
+<a name="chainable_routes"></a>
+## Chainable routes
+Sometimes it's a good idea to have multiple routes work in a single request.
+For example, you could check that the page exists in a route, then check if the user is logged
+in another, then load the page in another route...
+
+The function `\Alexya\Router\Router::route` can accept as parameter a boolean that tells
+if the router will support chainable routes or not.
+
+When the router supports chainable routes it will loop through ALL routes and execute all the routes
+that are matched, to stop the router you can let the route callback return `false` or finish the script execution with `die` or `exit`.
+
+Example:
+
+```php
+<?php
+
+$router = new \Alexya\Router\Router();
+$router->add("(.*)", function() {
+    echo "Page requested";
+});
+$router->add("/User/([a-zA-Z]*)", function($user) {
+    echo "User {$user}";
+
+    return false; // Exit chain
+});
+$router->add("/User/([a-zA-Z]*)/(.*)", function($user, $action) {
+    echo "User {$user}, action {$action}";
+});
+
+$router->route(true);
+
+// Request URI: /User/test/asdf
+// Output:
+//  Page requested
+//  User test
 ```
