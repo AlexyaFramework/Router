@@ -168,7 +168,10 @@ class Router
             if($route->matches($this->_path)) {
                 $ret = $route->execute();
 
-                if(!$isChainable) {
+                if(
+                    !$isChainable &&
+                    !$ret
+                ) {
                     return $ret;
                 }
             }
