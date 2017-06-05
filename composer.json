@@ -1,7 +1,7 @@
 {
     "name": "alexya-framework/router",
     "type": "framework",
-    "version": "3.1.0",
+    "version": "3.1.1",
     "description": "Alexya's Router utilities",
     "keywords": ["php", "framework", "router", "php7", "alexya"],
     "license": "GNU",
