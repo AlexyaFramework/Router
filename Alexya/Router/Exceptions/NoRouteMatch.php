@@ -8,21 +8,23 @@ namespace Alexya\Router\Exceptions;
  *
  * Example:
  *
- *     try {
- *     	   $Router = new \Alexya\Router\Router();
- *     	   $Router->route()
- *     } catch(NoRouteMatch $e) {
- *         echo "The request doesn't match any route!";
- *     }
+ * ```php
+ * try {
+ *     $Router = new \Alexya\Router\Router();
+ *     $Router->route()
+ * } catch(NoRouteMatch $e) {
+ *     echo "The request doesn't match any route!";
+ * }
+ * ```
  *
  * @author Manulaiko <manulaiko@gmail.com>
  */
 class NoRouteMatch extends \Exception
 {
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param string $path Requested path
+     * @param string $path Requested path.
      */
     public function __construct(string $path)
     {

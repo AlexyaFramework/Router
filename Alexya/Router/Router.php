@@ -1,6 +1,8 @@
 <?php
 namespace Alexya\Router;
 
+use \InvalidArgumentException;
+
 use \Alexya\Router\Exceptions\NoRouteMatch;
 
 /**
@@ -15,17 +17,19 @@ use \Alexya\Router\Exceptions\NoRouteMatch;
  *
  * Example:
  *
- *     $Router = new \Alexya\Router\Router();
- *     // will route all requests of `/`
- *     // /forum
- *     // /forum/thread/1
- *     // /blog
- *     // /blog/post/1
+ * ```php
+ * $Router = new \Alexya\Router\Router();
+ * // will route all requests of `/`
+ * // /forum
+ * // /forum/thread/1
+ * // /blog
+ * // /blog/post/1
  *
- *     $Router = new \Alexya\Router\Router("blog");
- *     // will route all requests of `/blog` (if `/forum` is requested, it will be ignored).
- *     // /blog
- *     // /blog/post/1
+ * $Router = new \Alexya\Router\Router("blog");
+ * // will route all requests of `/blog` (if `/forum` is requested, it will be ignored).
+ * // /blog
+ * // /blog/post/1
+ * ```
  *
  * Once the router has been instantiated you will have to add the routes, you can do this using the method `add`.
  * The first parameter is the regular expression to match, the second parameter is the callback to execute if the
@@ -34,22 +38,24 @@ use \Alexya\Router\Exceptions\NoRouteMatch;
  *
  * Example:
  *
- *    $Router = new \Alexya\Router\Router("blog");
- *    $Router->add("/post/([0-9]*)", function($post_id) {
- *        echo "Requested post: {$post_id}";
- *    });
- *    // Matches:
- *    //  GET  /blog/post/
- *    //  GET  /blog/post/1
- *    //  POST /blog/post/3416321341
- *    //
- *    // Doesn't match:
- *    //  GET  /blog/post/a
- *    //  POST /post/
- *    //  GET  /post/1
+ * ```php
+ * $Router = new \Alexya\Router\Router("blog");
+ * $Router->add("/post/([0-9]*)", function($post_id) {
+ *     echo "Requested post: {$post_id}";
+ * });
+ * // Matches:
+ * //  GET  /blog/post/
+ * //  GET  /blog/post/1
+ * //  POST /blog/post/3416321341
+ * //
+ * // Doesn't match:
+ * //  GET  /blog/post/a
+ * //  POST /post/
+ * //  GET  /post/1
+ * ```
  *
  * You can also use the following methods for adding routes (all of the accepts as parameter the regular expression and the callback):
- *.
+ *
  *  * `get`: Adds a route for `GET` requests
  *  * `post`: Adds a route for `POST` requests.
  *  * `head`: Adds a route for `HEAD` requests.
@@ -66,49 +72,51 @@ use \Alexya\Router\Exceptions\NoRouteMatch;
  *
  * Example:
  *
- *    $Router = new \Alexya\Router\Router("blog");
+ * ```php
+ * $Router = new \Alexya\Router\Router("blog");
  *
- *    $Router->add("/post/([0-9]*)", function($id) {
- *        echo "Requested post: {$id}";
- *    }, "GET");
+ * $Router->add("/post/([0-9]*)", function($id) {
+ *    echo "Requested post: {$id}";
+ * }, "GET");
  *
- *    $Router->add("{DEFAULT}", function() {
- *        echo "The page doesn't exist!";
- *    });
+ * $Router->add("{DEFAULT}", function() {
+ *     echo "The page doesn't exist!";
+ * });
  *
- *    //  |           Request          |         Response       |
- *    //  |----------------------------|------------------------|
- *    //  | GET  /blog/post/           | Requested post:        |
- *    //  | GET  /blog/post/1          | Requested post: 1      |
- *    //  | POST /blog/post/3416321341 | The page doesn't exist |
- *    //  | GET  /blog/post/a          | The page doesn't exist |
- *    //  | POST /post/                | The page doesn't exist |
- *    //  | GET  /post/1               | The page doesn't exist |
+ * //  |           Request          |         Response       |
+ * //  |----------------------------|------------------------|
+ * //  | GET  /blog/post/           | Requested post:        |
+ * //  | GET  /blog/post/1          | Requested post: 1      |
+ * //  | POST /blog/post/3416321341 | The page doesn't exist |
+ * //  | GET  /blog/post/a          | The page doesn't exist |
+ * //  | POST /post/                | The page doesn't exist |
+ * //  | GET  /post/1               | The page doesn't exist |
+ * ```
  *
- * @see \Alexya\Router\Route For more information about the parameters sent to the `add` method
+ * @see Route For more information about the parameters sent to the `add` method.
  *
  * @author Manulaiko <manulaiko@gmail.com>
  */
 class Router
 {
     /**
-     * Routes array
+     * Routes array.
      *
-     * Contains all loaded routes
+     * Contains all loaded routes.
      *
-     * @var array Routes array
+     * @var array
      */
     private $_routes = [];
 
     /**
-     * Base URL
+     * Base URL.
      *
      * @var string
      */
     private $_basePath = "";
 
     /**
-     * Current relative URL
+     * Current relative URL.
      *
      * @var string
      */
@@ -119,7 +127,7 @@ class Router
      *
      * Route to execute if any of the other routes are matched.
      *
-     * @var \Alexya\Router\Route
+     * @var Route
      */
     private $_defaultRoute;
 
@@ -129,19 +137,21 @@ class Router
      * The parameter is the base path of all routes.
      * All routes added will be executed if they match `$basePath . $regex`:
      *
-     *     $Router = new \Alexya\Router\Router();
-     *     // will route all requests of `/`
-     *     // /forum
-     *     // /forum/thread/1
-     *     // /blog
-     *     // /blog/post/1
+     * ```php
+     * $Router = new \Alexya\Router\Router();
+     * // will route all requests of `/`
+     * // /forum
+     * // /forum/thread/1
+     * // /blog
+     * // /blog/post/1
      *
-     *     $Router = new \Alexya\Router\Router("blog");
-     *     // will route all requests of `/blog` (if `/forum` is requested, it will be ignored).
-     *     // /blog
-     *     // /blog/post/1
+     * $Router = new \Alexya\Router\Router("blog");
+     * // will route all requests of `/blog` (if `/forum` is requested, it will be ignored).
+     * // /blog
+     * // /blog/post/1
+     * ```
      *
-     * @param string $basePath Route's base path
+     * @param string $basePath Route's base path.
      */
     public function __construct(string $basePath = "")
     {
@@ -154,13 +164,13 @@ class Router
     }
 
     /**
-     * Test all routes until any of them matches (or there's a default route)
+     * Test all routes until any of them matches (or there's a default route).
      *
-     * @param bool $isChainable `true` to execute more than one route, `false` if not (deufalt = `false`)
+     * @param bool $isChainable `true` to execute more than one route, `false` if not (deufalt = `false`).
      *
-     * @return mixed Route's callback return
+     * @return mixed Route's callback return.
      *
-     * @return \Alexya\Router\Exceptions\NoRouteMatch If no route can handle the request
+     * @return NoRouteMatch If no route can handle the request.
      */
     public function route(bool $isChainable = false)
     {
@@ -214,34 +224,36 @@ class Router
      *
      * Example:
      *
-     *     $Router->add("/blog/post/([0-9]*)", function($id) {
-     *         echo "Requested post: {$id}";
-     *     });
-     *     $Router->add("/forum/thread/([0-9]*)", function($id) {
-     *         echo "Requested thread: {$id}";
-     *     }, ["GET", "POST"]);
+     * ```php
+     * $Router->add("/blog/post/([0-9]*)", function($id) {
+     *     echo "Requested post: {$id}";
+     * });
+     * $Router->add("/forum/thread/([0-9]*)", function($id) {
+     *     echo "Requested thread: {$id}";
+     * }, ["GET", "POST"]);
      *
-     *     $Router->add([
-     *         [
-     *             "/blog/post/([0-9]*)",
-     *             function($id) {
-     *                 echo "Requested post: {$id}";
-     *             }
-     *         ],
-     *         [
-     *             "/forum/thread/([0-9]*)",
-     *             function($id) {
-     *                 echo "Requested thread: {$id}";
-     *             },
-     *             ["GET", "POST"]
-     *         ]
-     *     ]);
+     * $Router->add([
+     *     [
+     *         "/blog/post/([0-9]*)",
+     *         function($id) {
+     *             echo "Requested post: {$id}";
+     *         }
+     *     ],
+     *     [
+     *         "/forum/thread/([0-9]*)",
+     *         function($id) {
+     *             echo "Requested thread: {$id}";
+     *         },
+     *         ["GET", "POST"]
+     *     ]
+     * ]);
+     * ```
      *
-     * @param mixed|string $regexp   Regular expression to match
-     * @param callable     $callback Callback to execute if $expr is matched
-     * @param array|string $methods  Methods on which the expression should be matched
+     * @param mixed|string $regexp   Regular expression to match.
+     * @param callable     $callback Callback to execute if `$regexp` is matched.
+     * @param array|string $methods  Methods on which the expression should be matched.
      *
-     * @throws \InvalidArgumentException If `$callback` is null, any of the `$regexp` index isn't an array or isn't valid
+     * @throws InvalidArgumentException If `$callback` is null, any of the `$regexp` index isn't an array or isn't valid.
      */
     public function add($regexp, callable $callback = null, $methods = null)
     {
@@ -250,10 +262,15 @@ class Router
                 throw new InvalidArgumentException("Route callback can't be null!");
             }
 
+            $arr = [];
+            if(preg_match("/^\{(((GET|POST|PUT|DELETE|HEAD),?)*)\}(.*)/", $regexp, $arr)) {
+                $methods = explode(",", $arr[1]);
+            }
+
             $route = new Route($regexp, $callback, $methods);
 
             $this->_routes[] = $route;
-            if($regexp == "{DEFAULT}") {
+            if($regexp === "{DEFAULT}") {
                 $this->_defaultRoute = $route;
             }
 
@@ -281,7 +298,7 @@ class Router
             $route = new Route($regexp, $callback, $methods);
 
             $this->_routes[] = $route;
-            if($regexp == "{DEFAULT}") {
+            if($regexp === "{DEFAULT}") {
                 $this->_defaultRoute = $route;
             }
         }
@@ -290,7 +307,7 @@ class Router
     /**
      * Sets the default route.
      *
-     * @param \Alexya\Router\Route $route Default route.
+     * @param Route $route Default route.
      */
     public function setDefault(Route $route)
     {
@@ -301,10 +318,10 @@ class Router
     // Start fallbacks //
     /////////////////////
     /**
-     * Add a route for GET requests
+     * Add a route for GET requests.
      *
-     * @param string   $regexp
-     * @param callback $callback
+     * @param string   $regexp   Regular expression to match.
+     * @param callable $callback Callback to execute if `$regexp` is matched.
      */
     public function get(string $regexp, callable $callback)
     {
@@ -312,10 +329,10 @@ class Router
     }
 
     /**
-     * Add a route for POST requests
+     * Add a route for POST requests.
      *
-     * @param string   $regexp
-     * @param callback $callback
+     * @param string   $regexp   Regular expression to match.
+     * @param callable $callback Callback to execute if `$regexp` is matched.
      */
     public function post(string $regexp, callable $callback)
     {
@@ -323,10 +340,10 @@ class Router
     }
 
     /**
-     * Add a route for HEAD requests
+     * Add a route for HEAD requests.
      *
-     * @param string   $regexp
-     * @param callback $callback
+     * @param string   $regexp   Regular expression to match.
+     * @param callable $callback Callback to execute if `$regexp` is matched.
      */
     public function head(string $regexp, callable $callback)
     {
@@ -334,10 +351,10 @@ class Router
     }
 
     /**
-     * Add a route for PUT requests
+     * Add a route for PUT requests.
      *
-     * @param string   $regexp
-     * @param callback $callback
+     * @param string   $regexp   Regular expression to match.
+     * @param callable $callback Callback to execute if `$regexp` is matched.
      */
     public function put(string $regexp, callable $callback)
     {
@@ -345,10 +362,10 @@ class Router
     }
 
     /**
-     * Add a route for DELETE requests
+     * Add a route for DELETE requests.
      *
-     * @param string   $regexp
-     * @param callback $callback
+     * @param string   $regexp   Regular expression to match.
+     * @param callable $callback Callback to execute if `$regexp` is matched.
      */
     public function delete(string $regexp, callable $callback)
     {

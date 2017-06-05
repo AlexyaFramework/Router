@@ -66,13 +66,12 @@ class Route
      * Constructor.
      *
      * @param string       $regexp   Regular expression to test against.
-     * @param function     $callback Function executed if route matches.
+     * @param callable     $callback Function executed if route matches.
      * @param string|array $methods  Methods allowed.
      */
     public function __construct(string $regexp, callable $callback, $methods = null)
     {
-        // Allow an optional trailing backslash
-        $this->_regexp   = '#^'.$regexp.'/?$#';
+        $this->_regexp   = '#^'. $regexp .'/?$#';
         $this->_callback = $callback;
 
         if(!is_null($methods)) {
@@ -111,7 +110,7 @@ class Route
     {
         if(
             !$this->isMatched &&
-            $this->_regexp != "#^{DEFAULT}/?#"
+            $this->_regexp != "#^{DEFAULT}$#"
         ) {
             return;
         }
