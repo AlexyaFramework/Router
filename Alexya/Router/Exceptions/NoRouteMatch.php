@@ -3,6 +3,7 @@ namespace Alexya\Router\Exceptions;
 
 /**
  * No route match exception.
+ * =========================
  *
  * This exception is thrown when the router didn't find any route that matches the request.
  *

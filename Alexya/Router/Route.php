@@ -3,6 +3,7 @@ namespace Alexya\Router;
 
 /**
  * Route class.
+ * ============
  *
  * This class is used to represent a route.
  *
@@ -112,7 +113,7 @@ class Route
             !$this->isMatched &&
             $this->_regexp != "#^{DEFAULT}$#"
         ) {
-            return;
+            return null;
         }
 
         return ($this->_callback)(... array_slice($this->_matches, 1));

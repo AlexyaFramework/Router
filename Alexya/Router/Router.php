@@ -7,6 +7,7 @@ use \Alexya\Router\Exceptions\NoRouteMatch;
 
 /**
  * Router class.
+ * =============
  *
  * The router translates the HTTP requests and routes them through
  * different specified callbacks until one can handle it.
@@ -170,7 +171,7 @@ class Router
      *
      * @return mixed Route's callback return.
      *
-     * @return NoRouteMatch If no route can handle the request.
+     * @throws NoRouteMatch If no route can handle the request.
      */
     public function route(bool $isChainable = false)
     {
@@ -255,7 +256,7 @@ class Router
      *
      * @throws InvalidArgumentException If `$callback` is null, any of the `$regexp` index isn't an array or isn't valid.
      */
-    public function add($regexp, callable $callback = null, $methods = null)
+    public function add($regexp, callable $callback = null, $methods = null) : void
     {
         if(!is_array($regexp)) {
             if(is_null($callback)) {
@@ -309,7 +310,7 @@ class Router
      *
      * @param Route $route Default route.
      */
-    public function setDefault(Route $route)
+    public function setDefault(Route $route) : void
     {
         $this->_defaultRoute = $route;
     }
@@ -323,7 +324,7 @@ class Router
      * @param string   $regexp   Regular expression to match.
      * @param callable $callback Callback to execute if `$regexp` is matched.
      */
-    public function get(string $regexp, callable $callback)
+    public function get(string $regexp, callable $callback) : void
     {
         $this->add($regexp, $callback, 'GET');
     }
@@ -334,7 +335,7 @@ class Router
      * @param string   $regexp   Regular expression to match.
      * @param callable $callback Callback to execute if `$regexp` is matched.
      */
-    public function post(string $regexp, callable $callback)
+    public function post(string $regexp, callable $callback) : void
     {
         $this->add($regexp, $callback, 'POST');
     }
@@ -345,7 +346,7 @@ class Router
      * @param string   $regexp   Regular expression to match.
      * @param callable $callback Callback to execute if `$regexp` is matched.
      */
-    public function head(string $regexp, callable $callback)
+    public function head(string $regexp, callable $callback) : void
     {
         $this->add($regexp, $callback, 'HEAD');
     }
@@ -356,7 +357,7 @@ class Router
      * @param string   $regexp   Regular expression to match.
      * @param callable $callback Callback to execute if `$regexp` is matched.
      */
-    public function put(string $regexp, callable $callback)
+    public function put(string $regexp, callable $callback) : void
     {
         $this->add($regexp, $callback, 'PUT');
     }
@@ -367,7 +368,7 @@ class Router
      * @param string   $regexp   Regular expression to match.
      * @param callable $callback Callback to execute if `$regexp` is matched.
      */
-    public function delete(string $regexp, callable $callback)
+    public function delete(string $regexp, callable $callback) : void
     {
         $this->add($regexp, $callback, 'DELETE');
     }
